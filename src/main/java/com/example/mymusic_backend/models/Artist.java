@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -28,9 +29,15 @@ public class Artist {
     private Image logo;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Artist artist)) return false;
+        return Objects.equals(getId(), artist.getId()) && Objects.equals(getName(), artist.getName()) && Objects.equals(getAlbums(), artist.getAlbums()) && Objects.equals(getLogo(), artist.getLogo());
+    }
 
-
-
-
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getAlbums(), getLogo());
+    }
 }

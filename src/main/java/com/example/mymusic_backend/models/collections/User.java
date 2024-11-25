@@ -1,5 +1,7 @@
 package com.example.mymusic_backend.models.collections;
 
+import com.example.mymusic_backend.models.Artist;
+import com.example.mymusic_backend.models.Music;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,8 +32,15 @@ public class User {
 
     private String password;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Playlist> playlists = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Artist> artists = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Music> musics = new HashSet<>();
+
 
 
     private Long popularity;
@@ -49,6 +58,20 @@ public class User {
         this.playlists.remove(playlist);
     }
 
+    public void addArtist(Artist artist){
+        this.artists.add(artist);
+    }
+
+    public void removeArtist(Artist artist){
+        this.artists.remove(artist);
+    }
+
+    public void addMusic(Music music){
+        this.musics.add(music);
+    }
+    public void removeMusic(Music music){
+        this.musics.remove(music);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

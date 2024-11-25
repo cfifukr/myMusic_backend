@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PlaylistService {
@@ -20,7 +21,6 @@ public class PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final UserRepository userRepository;
     private final MusicRepository musicRepository;
-
     private final ImageRepository imageRepository;
 
     @Autowired
@@ -73,6 +73,28 @@ public class PlaylistService {
         playlistRepository.save(playlist);
 
         return  true;
+
+
+    }
+
+    public Set<Playlist> getUserPlaylists(Long userId){
+
+        return userRepository.getUserPlaylists(userId);
+    }
+
+    public boolean addPlaylistToUser(Long playlistId, Long userId){
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isEmpty()) return false;
+        User user = userOpt.get();
+
+        Optional<Playlist> playlistOpt = playlistRepository.findById(playlistId);
+        if(playlistOpt.isEmpty()) return false;
+        Playlist playlist = playlistOpt.get();
+
+        user.addPlaylist(playlist);
+        userRepository.save(user);
+        return true;
+
 
 
     }

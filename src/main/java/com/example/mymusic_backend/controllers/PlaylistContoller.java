@@ -62,6 +62,15 @@ public class PlaylistContoller {
     }
 
 
+    @PostMapping("/{playlistId}")
+    public ResponseEntity<?> addPlaylistToUser(@PathVariable("playlistId") Long playlistId,
+                                                @RequestParam(value = "userId", required = true) Long userId){
+
+        boolean isAdded = playlistService.addPlaylistToUser(playlistId, userId);
+
+        return (isAdded ? ResponseEntity.ok(null) : ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
+    }
     @PutMapping("/{playlistId}")
     public ResponseEntity<?> addMusicToPlaylist(@PathVariable("playlistId") Long playlistId,
                                                        @RequestParam("musicId") Long musicId){
@@ -76,4 +85,13 @@ public class PlaylistContoller {
     }
 
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getPlayersPlaylist(@PathVariable("userId") Long userId){
+        Set<Playlist> playlists = playlistService.getUserPlaylists(userId);
+
+        return ResponseEntity.ok(
+                playlists.stream()
+                        .map(PlaylistDto::getDto)
+                        .toList());
+    }
 }
